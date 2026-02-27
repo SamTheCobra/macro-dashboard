@@ -1,0 +1,276 @@
+[
+  {
+    "name": "USD Debasement & Hard Asset Premium",
+    "description": "The structural expansion of the Fed balance sheet, record US deficit spending (>6% GDP), and de-dollarization pressures from BRICS+ create a long-term tailwind for hard assets — gold, silver, commodities, and energy — as dollar purchasing power erodes. Central bank gold accumulation (1,000+ tonnes/year) confirms the institutional thesis.",
+    "sector": "Macro / Commodities / Gold",
+    "time_horizon": "24-36 months",
+    "confidence_level": 8,
+    "activation_date": "2024-01-15T00:00:00",
+    "bear_case": "A debt-deflation shock or aggressive Fed hawkishness could strengthen the dollar sharply, crushing gold and commodities. If the US government unexpectedly achieves fiscal consolidation (unlikely but possible post-election), the deficit narrative unwinds. Dollar dominance has proven more durable than bears expected repeatedly in the past — the Eurodollar system has structural USD demand that offsets supply expansion.",
+    "second_order_effects": [
+      {"order_level": 2, "description": "Gold reprices toward $3,000–3,500 as institutional allocations shift from 0.5% to 2%+ of portfolios", "sort_order": 1},
+      {"order_level": 2, "description": "Commodity-exporting emerging markets (Brazil, Australia, Canada) outperform as dollar weakens", "sort_order": 2},
+      {"order_level": 2, "description": "Energy sector real returns expand as oil reprices in weak-dollar environment", "sort_order": 3},
+      {"order_level": 3, "description": "Mining equity premium expands as CapEx underspend meets rising commodity prices", "sort_order": 4},
+      {"order_level": 3, "description": "Real asset REITs (infrastructure, timber, farmland) attract rotation from financial assets", "sort_order": 5},
+      {"order_level": 3, "description": "Bitcoin and crypto attract safe-haven bid as digital gold narrative strengthens", "sort_order": 6}
+    ],
+    "assumptions": [
+      {"text": "US fiscal deficit remains >4% of GDP through the cycle", "evidence_rating": "strong"},
+      {"text": "Fed cannot credibly commit to long-term balance sheet normalization", "evidence_rating": "strong"},
+      {"text": "Central bank gold demand continues at 800+ tonnes/year", "evidence_rating": "strong"},
+      {"text": "De-dollarization in trade settlement accelerates meaningfully", "evidence_rating": "mixed"},
+      {"text": "Real interest rates stay negative or near zero over the thesis horizon", "evidence_rating": "mixed"}
+    ],
+    "invalidation_conditions": [
+      {"description": "DXY Dollar Index breaks above 115 and holds for 2+ months on fiscal discipline signals"},
+      {"description": "US Congress passes credible multi-year deficit reduction plan (>$2T over 10 years)"},
+      {"description": "Gold drops below $1,800 — signals market disbelief in the debasement thesis"},
+      {"description": "Fed embarks on aggressive QT that actually shrinks balance sheet below $7T"}
+    ],
+    "proxy_indicators": [
+      {"ticker_or_series_id": "GLD", "name": "SPDR Gold ETF", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "UUP", "name": "Invesco USD Bull ETF", "source": "yfinance", "expected_direction": "down"},
+      {"ticker_or_series_id": "M2SL", "name": "M2 Money Supply", "source": "fred", "expected_direction": "up"},
+      {"ticker_or_series_id": "GDX", "name": "VanEck Gold Miners ETF", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "CPIAUCSL", "name": "CPI (Inflation)", "source": "fred", "expected_direction": "up"}
+    ],
+    "catalysts": [
+      {"event_name": "FOMC Meeting — Rate Decision", "event_date": "2025-03-19T00:00:00", "event_type": "fed", "description": "Any dovish pivot or pause signals dollar weakness and gold bullish."},
+      {"event_name": "US Treasury Quarterly Refunding Announcement", "event_date": "2025-05-01T00:00:00", "event_type": "regulatory", "description": "Large issuance volumes confirm deficit spending trajectory."},
+      {"event_name": "BRICS+ Currency Summit", "event_date": "2025-10-01T00:00:00", "event_type": "other", "description": "Any announcement of commodity-backed trade currency accelerates thesis."}
+    ],
+    "bets": [
+      {
+        "name": "Long Gold via GLD ETF",
+        "ticker": "GLD",
+        "entry_price": 182.50,
+        "target_price": 240.00,
+        "stop_price": 165.00,
+        "position_size_pct": 8.0,
+        "status": "active",
+        "entry_date": "2024-01-20T00:00:00",
+        "notes": "Core hard asset position. Sized to 8% of portfolio.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 45, "probability": 0.35, "notes": "Dollar collapses on debt ceiling crisis or new QE", "target_price": 265.0},
+          {"scenario_type": "base", "expected_return_pct": 20, "probability": 0.45, "notes": "Gradual debasement, gold grinds higher", "target_price": 220.0},
+          {"scenario_type": "bear", "expected_return_pct": -12, "probability": 0.20, "notes": "Dollar squeeze from global risk-off, gold sold for liquidity", "target_price": 165.0}
+        ]
+      },
+      {
+        "name": "Long Gold Miners via GDX",
+        "ticker": "GDX",
+        "entry_price": 28.00,
+        "target_price": 45.00,
+        "stop_price": 22.00,
+        "position_size_pct": 4.0,
+        "status": "active",
+        "entry_date": "2024-02-05T00:00:00",
+        "notes": "Leveraged play on gold with operational leverage. Higher vol than GLD.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 85, "probability": 0.30, "notes": "Gold >$2800 + miner cost inflation contained", "target_price": 52.0},
+          {"scenario_type": "base", "expected_return_pct": 35, "probability": 0.45, "notes": "Gold at $2400, margins expand modestly", "target_price": 38.0},
+          {"scenario_type": "bear", "expected_return_pct": -25, "probability": 0.25, "notes": "Gold drops, energy costs rise — miner squeeze", "target_price": 22.0}
+        ]
+      },
+      {
+        "name": "Long Copper Miners via COPX",
+        "ticker": "COPX",
+        "entry_price": 38.00,
+        "target_price": 58.00,
+        "stop_price": 30.00,
+        "position_size_pct": 3.0,
+        "status": "watching",
+        "notes": "Copper = real economy debasement hedge + AI infrastructure demand overlap.",
+        "scenarios": []
+      }
+    ],
+    "conviction_entries": [
+      {"date": "2024-01-15T00:00:00", "conviction_score": 7, "note": "Initiating thesis. Fed balance sheet at $7.7T, deficit widening. Core setup in place.", "tag": "new_data"},
+      {"date": "2024-03-20T00:00:00", "conviction_score": 8, "note": "Gold breaks $2,100 ATH. Central bank buying confirmed at 1,037 tonnes in 2023. Conviction rising.", "tag": "catalyst"},
+      {"date": "2024-06-15T00:00:00", "conviction_score": 8, "note": "Dollar index holding 104 but gold still elevated — suggests paper dollar demand decoupling from gold.", "tag": "reaffirmed"},
+      {"date": "2024-10-01T00:00:00", "conviction_score": 9, "note": "Gold $2,650. Fed cutting. China and India continuing aggressive gold accumulation. All assumptions holding.", "tag": "reaffirmed"},
+      {"date": "2025-01-10T00:00:00", "conviction_score": 8, "note": "Trump tariffs create dollar strength headwind short-term. Watching DXY closely. Still long-term bullish.", "tag": "new_data"}
+    ]
+  },
+
+  {
+    "name": "AI Infrastructure Supercycle",
+    "description": "The buildout of AI training and inference capacity represents the largest CapEx cycle since the 1990s internet boom. Hyperscalers are committing $300B+ annually in data center spend through 2026. This creates compounding demand across semiconductors, power infrastructure, cooling systems, and copper interconnects — with supply constrained in all categories.",
+    "sector": "Technology / Infrastructure / Energy",
+    "time_horizon": "36-60 months",
+    "confidence_level": 9,
+    "activation_date": "2023-11-01T00:00:00",
+    "bear_case": "AI capex could prove cyclical, not structural — if model performance plateaus (hitting a scaling wall), hyperscalers cut spending sharply. Regulatory intervention on AI could create multi-year headwinds. China semiconductor advancement could commoditize AI chips faster than expected, collapsing NVDA's pricing power. OpenAI's DeepSeek-style efficiency gains reduce compute requirements dramatically.",
+    "second_order_effects": [
+      {"order_level": 2, "description": "Power grid demand surge — data centers require 50GW+ of new capacity by 2030, straining US grid", "sort_order": 1},
+      {"order_level": 2, "description": "Semiconductor shortage 2.0 — TSMC advanced node capacity constrained through 2026", "sort_order": 2},
+      {"order_level": 2, "description": "Data center real estate premium — specialized REITs (EQIX, DLR) see pricing power", "sort_order": 3},
+      {"order_level": 3, "description": "Nuclear energy revival — tech companies sign offtake deals for reliable 24/7 carbon-free power", "sort_order": 4},
+      {"order_level": 3, "description": "Copper demand explosion — AI data centers use 4x the copper of traditional buildings", "sort_order": 5},
+      {"order_level": 3, "description": "Cooling technology boom — liquid cooling companies (VRT, Vertiv) see structural demand", "sort_order": 6},
+      {"order_level": 3, "description": "Grid modernization CapEx — utilities and industrials exposed to grid upgrade cycle", "sort_order": 7}
+    ],
+    "assumptions": [
+      {"text": "Hyperscaler AI capex sustains at >$200B/year through 2026", "evidence_rating": "strong"},
+      {"text": "NVDA maintains 70%+ AI chip market share for 3+ years", "evidence_rating": "mixed"},
+      {"text": "Power grid constraints remain a binding bottleneck through 2027", "evidence_rating": "strong"},
+      {"text": "Enterprise AI adoption accelerates, justifying inference compute expansion", "evidence_rating": "mixed"},
+      {"text": "No major regulatory crackdown on AI development in US/EU", "evidence_rating": "mixed"}
+    ],
+    "invalidation_conditions": [
+      {"description": "NVDA revenue misses by >15% for two consecutive quarters — signals AI capex pullback"},
+      {"description": "Microsoft, Google, or Amazon publicly cuts AI capex guidance by >20%"},
+      {"description": "Open-source AI model achieves GPT-4 quality at 1/10th compute cost — destroys NVDA moat"},
+      {"description": "Semiconductor index (SMH) breaks below 2023 highs and holds for 3+ months"}
+    ],
+    "proxy_indicators": [
+      {"ticker_or_series_id": "SMH", "name": "VanEck Semiconductor ETF", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "NVDA", "name": "NVIDIA Corp", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "VST", "name": "Vistra Energy (Nuclear/Power)", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "COPX", "name": "Copper Miners ETF", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "VRT", "name": "Vertiv (Cooling/Data Center)", "source": "yfinance", "expected_direction": "up"}
+    ],
+    "catalysts": [
+      {"event_name": "NVDA Earnings Q4 FY2025", "event_date": "2025-02-26T00:00:00", "event_type": "earnings", "description": "Blackwell GPU demand confirmation. Any data center revenue beat is thesis-accelerating."},
+      {"event_name": "Microsoft Build Conference", "event_date": "2025-05-19T00:00:00", "event_type": "other", "description": "Azure AI capacity announcements. Watch for capex guidance."},
+      {"event_name": "US AI Executive Order / Regulation", "event_date": "2025-07-01T00:00:00", "event_type": "regulatory", "description": "Potential export controls on AI chips. Risk event for thesis."},
+      {"event_name": "Google I/O 2025", "event_date": "2025-05-14T00:00:00", "event_type": "earnings", "description": "TPU capacity and Gemini deployment signals."}
+    ],
+    "bets": [
+      {
+        "name": "Long Semiconductors via SMH",
+        "ticker": "SMH",
+        "entry_price": 142.00,
+        "target_price": 230.00,
+        "stop_price": 118.00,
+        "position_size_pct": 6.0,
+        "status": "active",
+        "entry_date": "2023-11-10T00:00:00",
+        "notes": "Diversified semiconductor exposure. Less single-stock NVDA risk.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 70, "probability": 0.40, "notes": "AI capex accelerates, TSMC expands, all semis rerate", "target_price": 241.0},
+          {"scenario_type": "base", "expected_return_pct": 35, "probability": 0.40, "notes": "Steady capex, moderate growth, semiconductors consolidate gains", "target_price": 192.0},
+          {"scenario_type": "bear", "expected_return_pct": -20, "probability": 0.20, "notes": "AI capex cycle pauses, inventory correction", "target_price": 118.0}
+        ]
+      },
+      {
+        "name": "Long Nuclear/Power via VST",
+        "ticker": "VST",
+        "entry_price": 32.00,
+        "target_price": 85.00,
+        "stop_price": 25.00,
+        "position_size_pct": 4.0,
+        "status": "active",
+        "entry_date": "2024-03-01T00:00:00",
+        "notes": "AI power demand play. Vistra has nuclear + nat gas fleet perfectly positioned.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 120, "probability": 0.35, "notes": "Tech offtake deals, power shortage premium", "target_price": 95.0},
+          {"scenario_type": "base", "expected_return_pct": 60, "probability": 0.45, "notes": "Gradual re-rate as power scarcity becomes consensus", "target_price": 65.0},
+          {"scenario_type": "bear", "expected_return_pct": -22, "probability": 0.20, "notes": "Regulatory rollback of nuclear, gas prices spike costs", "target_price": 25.0}
+        ]
+      },
+      {
+        "name": "Long NVDA (Speculative)",
+        "ticker": "NVDA",
+        "entry_price": 480.00,
+        "target_price": 900.00,
+        "stop_price": 380.00,
+        "position_size_pct": 3.0,
+        "status": "active",
+        "entry_date": "2023-12-01T00:00:00",
+        "notes": "High conviction single-stock. Blackwell supercycle. Small size vs SMH due to concentration risk.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 100, "probability": 0.35, "notes": "Blackwell fully sold out, data center revenue doubles", "target_price": 960.0},
+          {"scenario_type": "base", "expected_return_pct": 50, "probability": 0.40, "notes": "Steady growth, P/E compression offsets revenue growth", "target_price": 720.0},
+          {"scenario_type": "bear", "expected_return_pct": -25, "probability": 0.25, "notes": "Competition from AMD/Intel, China restrictions bite", "target_price": 380.0}
+        ]
+      }
+    ],
+    "conviction_entries": [
+      {"date": "2023-11-01T00:00:00", "conviction_score": 8, "note": "GPT-4 moment clear. Hyperscaler capex guidance blowing out. Initiating with high conviction.", "tag": "new_data"},
+      {"date": "2024-01-25T00:00:00", "conviction_score": 9, "note": "NVDA Q3 earnings: revenue $18.1B vs $16B est. Data center segment +400% YoY. Thesis confirmed.", "tag": "catalyst"},
+      {"date": "2024-05-22T00:00:00", "conviction_score": 9, "note": "NVDA Q1 FY25: $26B revenue. Blackwell transition ahead of schedule. Power grid strain becoming mainstream narrative.", "tag": "reaffirmed"},
+      {"date": "2024-09-01T00:00:00", "conviction_score": 8, "note": "DeepSeek concerns surface — open source efficiency improving faster than expected. Monitoring NVDA moat carefully.", "tag": "new_data"},
+      {"date": "2025-01-27T00:00:00", "conviction_score": 7, "note": "DeepSeek R1 launches: inference efficiency 10x better. Short-term concern for demand. Long-term Jevons paradox may apply — lower cost = more usage.", "tag": "changed_mind"}
+    ]
+  },
+
+  {
+    "name": "Yield Curve Re-steepening",
+    "description": "The yield curve inverted sharply in 2022-2023 as the Fed hiked aggressively. As the Fed cuts short rates while long-end inflation expectations remain elevated (fiscal dominance, structural commodity demand), the curve re-steepens. This creates a structural tailwind for bank net interest margins (borrow short, lend long) and pressure on long-duration bond holders. The 10Y-2Y spread normalizing to +50-150bps is the base case.",
+    "sector": "Fixed Income / Macro / Financials",
+    "time_horizon": "12-24 months",
+    "confidence_level": 7,
+    "activation_date": "2024-06-01T00:00:00",
+    "bear_case": "The curve re-steepens via a bear-steepener (long rates rise on inflation fears, growth collapses) rather than a bull-steepener (short rates fall, long rates stable). This could tank both equities and regional banks simultaneously. Alternatively, a deflation shock (hard landing) causes the curve to steepen via collapsing short rates but also crushes loan demand, negating the NIM benefit for banks.",
+    "second_order_effects": [
+      {"order_level": 2, "description": "Bank NIM (net interest margin) expands as borrow-short-lend-long dynamics return to profitability", "sort_order": 1},
+      {"order_level": 2, "description": "Pension fund liability-duration mismatch improves, reducing forced long-bond buying", "sort_order": 2},
+      {"order_level": 2, "description": "Dollar funding pressures ease as short-term USD rates decline", "sort_order": 3},
+      {"order_level": 3, "description": "Regional bank outperformance as community lenders see NIM expansion first", "sort_order": 4},
+      {"order_level": 3, "description": "Insurance sector benefits — reinvestment yields improve", "sort_order": 5},
+      {"order_level": 3, "description": "EM sovereign debt stress in high-USD-debt countries eases as dollar weakens", "sort_order": 6}
+    ],
+    "assumptions": [
+      {"text": "Fed cuts short-term rates 150-200bps through 2025 as inflation moderates", "evidence_rating": "mixed"},
+      {"text": "10Y yield stays above 4% due to term premium and fiscal concerns", "evidence_rating": "mixed"},
+      {"text": "No recession severe enough to cause a panic flight into long bonds", "evidence_rating": "weak"},
+      {"text": "Bank credit quality remains manageable (CRE losses contained)", "evidence_rating": "weak"}
+    ],
+    "invalidation_conditions": [
+      {"description": "10Y-2Y spread exceeds +200bps via bear-steepening (growth collapse signal)"},
+      {"description": "Fed pauses cuts before reaching 3.5% — inflation re-acceleration kills the thesis"},
+      {"description": "Major US bank failure triggers systemic credit event"},
+      {"description": "KRE (regional bank ETF) drops below $40 and holds — market voting against NIM thesis"}
+    ],
+    "proxy_indicators": [
+      {"ticker_or_series_id": "T10Y2Y", "name": "10Y-2Y Treasury Spread", "source": "fred", "expected_direction": "up"},
+      {"ticker_or_series_id": "GS10", "name": "10Y Treasury Yield", "source": "fred", "expected_direction": "neutral"},
+      {"ticker_or_series_id": "KRE", "name": "Regional Banks ETF", "source": "yfinance", "expected_direction": "up"},
+      {"ticker_or_series_id": "TLT", "name": "iShares 20Y+ Treasury ETF (inverse signal)", "source": "yfinance", "expected_direction": "down"},
+      {"ticker_or_series_id": "FEDFUNDS", "name": "Fed Funds Rate", "source": "fred", "expected_direction": "down"}
+    ],
+    "catalysts": [
+      {"event_name": "FOMC Rate Decision", "event_date": "2025-03-19T00:00:00", "event_type": "fed", "description": "25bps cut = thesis on track. Pause = conviction reduces."},
+      {"event_name": "US CPI Report", "event_date": "2025-04-10T00:00:00", "event_type": "other", "description": "Inflation print above 3.5% would pause Fed cuts, challenging the thesis."},
+      {"event_name": "Bank Earnings Season Q1 2025", "event_date": "2025-04-15T00:00:00", "event_type": "earnings", "description": "Watch NIM guidance from JPM, BAC, WFC — confirmation or denial of the core bet."},
+      {"event_name": "US Treasury 10Y Auction", "event_date": "2025-05-07T00:00:00", "event_type": "other", "description": "Weak demand (high tail) signals long-end concerns, could cause bear steepener."}
+    ],
+    "bets": [
+      {
+        "name": "Long Regional Banks via KRE",
+        "ticker": "KRE",
+        "entry_price": 48.00,
+        "target_price": 68.00,
+        "stop_price": 38.00,
+        "position_size_pct": 5.0,
+        "status": "active",
+        "entry_date": "2024-06-10T00:00:00",
+        "notes": "Direct NIM expansion play. KRE has highest NIM sensitivity of any ETF.",
+        "scenarios": [
+          {"scenario_type": "bull", "expected_return_pct": 55, "probability": 0.30, "notes": "Bull steepener: Fed cuts 200bps, 10Y holds 4.2%, NIMs explode", "target_price": 74.0},
+          {"scenario_type": "base", "expected_return_pct": 30, "probability": 0.45, "notes": "Gradual NIM expansion, regional banks re-rate to 1.1x book", "target_price": 62.0},
+          {"scenario_type": "bear", "expected_return_pct": -22, "probability": 0.25, "notes": "CRE losses mount, credit quality issues overshadow NIM gains", "target_price": 38.0}
+        ]
+      },
+      {
+        "name": "Short Long Bonds via TBF",
+        "ticker": "TBF",
+        "entry_price": 22.00,
+        "target_price": 28.00,
+        "stop_price": 18.00,
+        "position_size_pct": 3.0,
+        "status": "watching",
+        "notes": "TBF is ProShares Short 20+ Year Treasury. Bet on 10Y staying elevated vs front end.",
+        "scenarios": []
+      }
+    ],
+    "conviction_entries": [
+      {"date": "2024-06-01T00:00:00", "conviction_score": 6, "note": "Fed starting to signal cuts. Curve still deeply inverted at -50bps. Setting up the trade.", "tag": "new_data"},
+      {"date": "2024-09-18T00:00:00", "conviction_score": 7, "note": "Fed cuts 50bps. 10Y-2Y spread moves from -50 to -20bps. Steepening begins.", "tag": "catalyst"},
+      {"date": "2024-12-01T00:00:00", "conviction_score": 7, "note": "Curve now +10bps. KRE up 18% since June. But Fed signaling slower cuts ahead — watching.", "tag": "reaffirmed"},
+      {"date": "2025-01-15T00:00:00", "conviction_score": 6, "note": "Strong jobs data pushing back Fed cut timeline. Long-end rising faster than expected. Risk of bear steepener increasing.", "tag": "new_data"}
+    ]
+  }
+]

@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    background-color: #080b10;
+    color: #e6edf3;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-terminal-card border border-terminal-border rounded-lg p-4;
+  }
+
+  .card-sm {
+    @apply bg-terminal-card border border-terminal-border rounded-md p-3;
+  }
+
+  .btn {
+    @apply px-3 py-1.5 rounded text-sm font-medium transition-all duration-150 cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply btn bg-terminal-green text-terminal-bg hover:brightness-110 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply btn bg-terminal-muted border border-terminal-border text-terminal-text hover:border-terminal-green hover:text-terminal-green;
+  }
+
+  .btn-danger {
+    @apply btn bg-transparent border border-terminal-red text-terminal-red hover:bg-terminal-red hover:text-white;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+
+  .input {
+    @apply w-full bg-terminal-muted border border-terminal-border rounded px-3 py-2 text-sm text-terminal-text
+           placeholder-terminal-dim focus:outline-none focus:border-terminal-green transition-colors;
+  }
+
+  .textarea {
+    @apply input resize-none;
+  }
+
+  .select {
+    @apply input cursor-pointer;
+  }
+
+  .label {
+    @apply block text-xs text-terminal-dim mb-1 uppercase tracking-wider;
+  }
+
+  .section-title {
+    @apply text-xs text-terminal-dim uppercase tracking-widest mb-3;
+  }
+
+  .health-high  { @apply text-terminal-green; }
+  .health-mid   { @apply text-terminal-amber; }
+  .health-low   { @apply text-terminal-red; }
+
+  .tab-active {
+    @apply border-b-2 border-terminal-green text-terminal-green;
+  }
+  .tab-inactive {
+    @apply border-b-2 border-transparent text-terminal-dim hover:text-terminal-text;
+  }
+}
+
+/* Plotly overrides for dark theme */
+.js-plotly-plot .plotly .modebar {
+  background: transparent !important;
+}
+.js-plotly-plot .plotly .modebar-btn path {
+  fill: #8b949e !important;
+}
+
+/* React Flow dark theme */
+.react-flow__background {
+  background-color: #0d1117 !important;
+}
+.react-flow__edge-path {
+  stroke: #1c2333 !important;
+}
+.react-flow__node {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.react-flow__controls {
+  background: #0d1117 !important;
+  border: 1px solid #1c2333 !important;
+}
+.react-flow__controls-button {
+  background: #0d1117 !important;
+  border-bottom: 1px solid #1c2333 !important;
+  fill: #8b949e !important;
+}
+.react-flow__minimap {
+  background: #0d1117 !important;
+}
