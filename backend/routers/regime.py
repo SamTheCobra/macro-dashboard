@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.services.regime_detection import detect_current_regime, regime_thesis_compat
-from backend.models import Thesis
+from ..database import get_db
+from ..services.regime_detection import detect_current_regime, regime_thesis_compat
+from ..models import Thesis
 
 router = APIRouter(prefix="/api/regime", tags=["regime"])
 

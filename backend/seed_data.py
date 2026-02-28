@@ -8,8 +8,8 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from backend.database import SessionLocal
-from backend.models import (
+from .database import SessionLocal
+from .models import (
     Thesis, SecondOrderEffect, Assumption, InvalidationCondition,
     ProxyIndicator, Catalyst, ActionableBet, BetScenario, ConvictionEntry,
 )

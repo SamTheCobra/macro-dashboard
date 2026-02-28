@@ -14,7 +14,7 @@ _scheduler: BackgroundScheduler = None
 
 def _refresh_job():
     try:
-        from backend.services.market_data import refresh_all_indicators
+        from .market_data import refresh_all_indicators
         logger.info("Scheduler: refreshing market data...")
         refresh_all_indicators()
         logger.info("Scheduler: refresh complete.")

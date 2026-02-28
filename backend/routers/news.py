@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models import Thesis
-from backend.services.news_service import fetch_news_for_thesis
+from ..database import get_db
+from ..models import Thesis
+from ..services.news_service import fetch_news_for_thesis
 
 router = APIRouter(prefix="/api/theses", tags=["news"])
 

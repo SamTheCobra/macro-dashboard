@@ -3,7 +3,7 @@ from typing import Dict, Optional
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 
-from backend.services.market_data import (
+from ..services.market_data import (
     fetch_price_history,
     fetch_fred_history,
     refresh_all_indicators,

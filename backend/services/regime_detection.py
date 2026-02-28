@@ -11,7 +11,7 @@ Rules are evaluated in priority order; first match wins.
 import logging
 from typing import Dict, Optional, Tuple
 
-from backend.services.market_data import get_latest_value, get_30d_return
+from .market_data import get_latest_value, get_30d_return
 
 logger = logging.getLogger(__name__)
 

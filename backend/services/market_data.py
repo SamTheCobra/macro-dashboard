@@ -10,9 +10,9 @@ from typing import Dict, Optional
 
 import yfinance as yf
 
-from backend.database import SessionLocal
-from backend.models import MarketDataCache
-from backend.services.fred_service import fetch_fred_series
+from ..database import SessionLocal
+from ..models import MarketDataCache
+from .fred_service import fetch_fred_series
 
 logger = logging.getLogger(__name__)
 
@@ -152,7 +152,7 @@ def refresh_all_indicators() -> None:
     """Triggered by scheduler or manual refresh endpoint."""
     db = SessionLocal()
     try:
-        from backend.models import ProxyIndicator
+        from ..models import ProxyIndicator
         indicators = db.query(ProxyIndicator).all()
         seen = set()
         for ind in indicators:
@@ -176,7 +176,7 @@ def refresh_all_indicators() -> None:
             fetch_fred_history(s, force_refresh=True)
 
         # Refresh current prices for active bets
-        from backend.models import ActionableBet
+        from ..models import ActionableBet
         bets = db.query(ActionableBet).filter(
             ActionableBet.status == "active",
             ActionableBet.ticker.isnot(None),

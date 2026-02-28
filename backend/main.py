@@ -8,9 +8,9 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.database import init_db
-from backend.routers import theses, bets, journal, market_data, regime, news, portfolio
-from backend.services.scheduler import start_scheduler, stop_scheduler
+from .database import init_db
+from .routers import theses, bets, journal, market_data, regime, news, portfolio
+from .services.scheduler import start_scheduler, stop_scheduler
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,7 +48,7 @@ async def startup():
     init_db()
 
     logger.info("Loading seed data if needed...")
-    from backend.seed_data import seed_if_empty
+    from .seed_data import seed_if_empty
     seed_if_empty()
 
     logger.info("Starting background scheduler...")

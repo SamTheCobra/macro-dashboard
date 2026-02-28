@@ -6,12 +6,12 @@ import numpy as np
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models import Thesis, ActionableBet, MarketDataCache
-from backend.schemas import PortfolioOverview
-from backend.services.health_score import calculate_health_score
-from backend.services.regime_detection import detect_current_regime
-from backend.services.market_data import fetch_price_history
+from ..database import get_db
+from ..models import Thesis, ActionableBet, MarketDataCache
+from ..schemas import PortfolioOverview
+from ..services.health_score import calculate_health_score
+from ..services.regime_detection import detect_current_regime
+from ..services.market_data import fetch_price_history
 
 logger = logging.getLogger(__name__)
 

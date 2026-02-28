@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models import ConvictionEntry, Thesis
-from backend.schemas import ConvictionEntryCreate, ConvictionEntryResponse
+from ..database import get_db
+from ..models import ConvictionEntry, Thesis
+from ..schemas import ConvictionEntryCreate, ConvictionEntryResponse
 
 router = APIRouter(prefix="/api/theses", tags=["journal"])
 

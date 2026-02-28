@@ -12,11 +12,11 @@ import json
 import logging
 from typing import TYPE_CHECKING
 
-from backend.database import SessionLocal
-from backend.models import MarketDataCache
+from ..database import SessionLocal
+from ..models import MarketDataCache
 
 if TYPE_CHECKING:
-    from backend.models import Thesis
+    from ..models import Thesis
 
 logger = logging.getLogger(__name__)
 

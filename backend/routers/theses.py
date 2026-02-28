@@ -4,12 +4,12 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models import (
+from ..database import get_db
+from ..models import (
     Thesis, SecondOrderEffect, Assumption, InvalidationCondition,
     ProxyIndicator, Catalyst, RetroScorecard
 )
-from backend.schemas import (
+from ..schemas import (
     ThesisCreate, ThesisUpdate, ThesisResponse, ThesisSummary,
     CloseThesisRequest,
     SecondOrderEffectCreate, SecondOrderEffectResponse,
@@ -18,7 +18,7 @@ from backend.schemas import (
     ProxyIndicatorCreate, ProxyIndicatorResponse,
     CatalystCreate, CatalystUpdate, CatalystResponse,
 )
-from backend.services.health_score import calculate_health_score
+from ..services.health_score import calculate_health_score
 
 router = APIRouter(prefix="/api/theses", tags=["theses"])
 
