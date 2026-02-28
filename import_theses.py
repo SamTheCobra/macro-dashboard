@@ -156,7 +156,9 @@ def import_theses(path: str, clear: bool = False) -> None:
                     print(f"    WARNING: Could not parse date '{cat.get('date')}' for catalyst '{cat.get('event')}' — skipping")
                     continue
                 impact = cat.get("impact", "other")
-                event_type = impact if impact in ("accelerate", "mixed", "decelerate") else "other"
+               valid_types = {"fed", "election", "earnings", "regulatory", "other"}
+event_type = impact if impact in valid_types else "other"
+
                 notes = cat.get("notes", "")
                 db.add(Catalyst(
                     thesis_id=thesis.id,

@@ -188,6 +188,7 @@ class CatalystResponse(CatalystBase):
     thesis_id: int
     outcome: Optional[str]
     is_past: bool
+    event_type: Optional[str] = None  # override: accept any string stored in DB
 
     class Config:
         from_attributes = True
@@ -397,3 +398,5 @@ class PortfolioOverview(BaseModel):
     avg_health_score: float
     regime: Optional[str]
     regime_confidence: Optional[str]
+
+event_type: Optional[str] = None  # override: accept any string stored in DB
