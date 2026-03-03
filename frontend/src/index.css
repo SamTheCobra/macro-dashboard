@@ -8,40 +8,119 @@
     background-color: #080b10;
     color: #e6edf3;
   }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1c2333 transparent;
+  }
+}
+
+/* ── Keyframes ─────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 136, 0.15); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes health-fill {
+  from { stroke-dashoffset: 251; }
 }
 
 @layer components {
+  /* ── Cards ─────────────────────────────────────────── */
   .card {
     @apply bg-terminal-card border border-terminal-border rounded-lg p-4;
+    animation: fadeIn 0.3s ease-out;
   }
 
   .card-sm {
     @apply bg-terminal-card border border-terminal-border rounded-md p-3;
   }
 
+  .card-hover {
+    @apply card cursor-pointer transition-all duration-200;
+  }
+  .card-hover:hover {
+    @apply border-terminal-green/40;
+    box-shadow: 0 0 24px rgba(0, 255, 136, 0.08), 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-glow {
+    @apply card;
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* ── Buttons ───────────────────────────────────────── */
   .btn {
-    @apply px-3 py-1.5 rounded text-sm font-medium transition-all duration-150 cursor-pointer;
+    @apply px-3 py-1.5 rounded text-sm font-medium transition-all duration-150 cursor-pointer
+           active:scale-[0.97] select-none;
   }
 
   .btn-primary {
-    @apply btn bg-terminal-green text-terminal-bg hover:brightness-110 active:scale-95;
+    @apply btn bg-terminal-green text-terminal-bg hover:brightness-110;
   }
 
   .btn-secondary {
-    @apply btn bg-terminal-muted border border-terminal-border text-terminal-text hover:border-terminal-green hover:text-terminal-green;
+    @apply btn bg-transparent border border-terminal-border text-terminal-dim
+           hover:border-terminal-green hover:text-terminal-green;
   }
 
   .btn-danger {
-    @apply btn bg-transparent border border-terminal-red text-terminal-red hover:bg-terminal-red hover:text-white;
+    @apply btn bg-transparent border border-terminal-red/40 text-terminal-red
+           hover:bg-terminal-red/10 hover:border-terminal-red;
   }
 
+  .btn-ghost {
+    @apply btn bg-transparent text-terminal-dim hover:text-terminal-text hover:bg-terminal-muted;
+  }
+
+  /* ── Badges ────────────────────────────────────────── */
   .badge {
     @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
   }
 
+  .badge-green {
+    @apply badge bg-terminal-green/10 text-terminal-green border border-terminal-green/20;
+  }
+
+  .badge-amber {
+    @apply badge bg-terminal-amber/10 text-terminal-amber border border-terminal-amber/20;
+  }
+
+  .badge-red {
+    @apply badge bg-terminal-red/10 text-terminal-red border border-terminal-red/20;
+  }
+
+  .badge-blue {
+    @apply badge bg-terminal-blue/10 text-terminal-blue border border-terminal-blue/20;
+  }
+
+  .badge-purple {
+    @apply badge bg-terminal-purple/10 text-terminal-purple border border-terminal-purple/20;
+  }
+
+  .badge-dim {
+    @apply badge bg-terminal-muted text-terminal-dim border border-terminal-border;
+  }
+
+  /* ── Form Elements ─────────────────────────────────── */
   .input {
     @apply w-full bg-terminal-muted border border-terminal-border rounded px-3 py-2 text-sm text-terminal-text
-           placeholder-terminal-dim focus:outline-none focus:border-terminal-green transition-colors;
+           placeholder-terminal-dim focus:outline-none focus:border-terminal-green/60 focus:ring-1 focus:ring-terminal-green/20 transition-all;
   }
 
   .textarea {
@@ -49,7 +128,7 @@
   }
 
   .select {
-    @apply input cursor-pointer;
+    @apply input cursor-pointer appearance-none;
   }
 
   .label {
@@ -57,35 +136,95 @@
   }
 
   .section-title {
-    @apply text-xs text-terminal-dim uppercase tracking-widest mb-3;
+    @apply text-xs text-terminal-dim uppercase tracking-widest mb-3 font-medium;
   }
 
+  /* ── Health Colors ─────────────────────────────────── */
   .health-high  { @apply text-terminal-green; }
   .health-mid   { @apply text-terminal-amber; }
   .health-low   { @apply text-terminal-red; }
 
+  /* ── Tabs ──────────────────────────────────────────── */
   .tab-active {
-    @apply border-b-2 border-terminal-green text-terminal-green;
+    @apply border-b-2 border-terminal-green text-terminal-green font-medium;
   }
   .tab-inactive {
-    @apply border-b-2 border-transparent text-terminal-dim hover:text-terminal-text;
+    @apply border-b-2 border-transparent text-terminal-dim hover:text-terminal-text transition-colors;
+  }
+
+  /* ── Skeleton / Loading ────────────────────────────── */
+  .skeleton {
+    @apply rounded bg-terminal-muted;
+    background: linear-gradient(90deg, #161b22 25%, #1c2333 50%, #161b22 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* ── Modal Overlay ─────────────────────────────────── */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.15s ease-out;
+  }
+
+  .modal-content {
+    @apply bg-terminal-card border border-terminal-border rounded-xl shadow-2xl
+           w-full max-h-[85vh] overflow-y-auto;
+    animation: slideUp 0.2s ease-out;
+  }
+
+  /* ── Pill Toggle (filter bar) ──────────────────────── */
+  .pill-group {
+    @apply flex items-center gap-1 bg-terminal-muted border border-terminal-border rounded-lg p-1;
+  }
+
+  .pill-active {
+    @apply px-3 py-1 rounded-md text-xs font-medium bg-terminal-green/10 text-terminal-green
+           border border-terminal-green/20 transition-all;
+  }
+
+  .pill-inactive {
+    @apply px-3 py-1 rounded-md text-xs text-terminal-dim hover:text-terminal-text transition-all;
+  }
+
+  /* ── Topbar ────────────────────────────────────────── */
+  .topbar {
+    @apply flex items-center justify-between px-5 h-14 border-b border-terminal-border bg-terminal-card/80 shrink-0;
+    backdrop-filter: blur(12px);
+  }
+
+  .topbar-nav-link {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150;
+  }
+
+  .topbar-nav-active {
+    @apply topbar-nav-link bg-terminal-green/10 text-terminal-green border border-terminal-green/20;
+  }
+
+  .topbar-nav-inactive {
+    @apply topbar-nav-link text-terminal-dim hover:text-terminal-text hover:bg-terminal-muted;
   }
 }
 
-/* Plotly overrides for dark theme */
+/* ── Plotly overrides for dark theme ──────────────────── */
 .js-plotly-plot .plotly .modebar {
   background: transparent !important;
 }
 .js-plotly-plot .plotly .modebar-btn path {
   fill: #8b949e !important;
 }
+.js-plotly-plot .plotly .modebar-btn:hover path {
+  fill: #00ff88 !important;
+}
 
-/* React Flow dark theme */
+/* ── React Flow dark theme ───────────────────────────── */
 .react-flow__background {
   background-color: #0d1117 !important;
 }
 .react-flow__edge-path {
   stroke: #1c2333 !important;
+  stroke-width: 2 !important;
 }
 .react-flow__node {
   font-family: 'JetBrains Mono', monospace !important;
@@ -93,12 +232,33 @@
 .react-flow__controls {
   background: #0d1117 !important;
   border: 1px solid #1c2333 !important;
+  border-radius: 8px !important;
 }
 .react-flow__controls-button {
   background: #0d1117 !important;
   border-bottom: 1px solid #1c2333 !important;
   fill: #8b949e !important;
 }
+.react-flow__controls-button:hover {
+  fill: #00ff88 !important;
+  background: #161b22 !important;
+}
 .react-flow__minimap {
   background: #0d1117 !important;
+  border-radius: 8px !important;
 }
+
+/* ── Stagger animation for grid children ─────────────── */
+.stagger-grid > * {
+  animation: fadeIn 0.35s ease-out backwards;
+}
+.stagger-grid > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-grid > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-grid > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-grid > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-grid > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-grid > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-grid > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-grid > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-grid > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-grid > *:nth-child(10) { animation-delay: 450ms; }

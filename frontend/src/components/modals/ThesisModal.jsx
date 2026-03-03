@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createThesis, updateThesis } from '../../utils/api'
-import { X, Plus, Trash2 } from 'lucide-react'
+import { X, Plus, Trash2, ChevronDown } from 'lucide-react'
 
 const SECTORS = [
   'Macro / Commodities / Gold',
@@ -13,6 +13,7 @@ const SECTORS = [
   'Crypto / Digital Assets',
   'Energy / Oil & Gas',
   'Healthcare / Biotech',
+  'Industrials / Defense',
   'Other',
 ]
 
@@ -25,6 +26,23 @@ const emptyEffect = () => ({ order_level: 2, description: '', sort_order: 0 })
 const emptyAssumption = () => ({ text: '', evidence_rating: 'mixed' })
 const emptyInvalidation = () => ({ description: '' })
 const emptyIndicator = () => ({ ticker_or_series_id: '', name: '', source: 'yfinance', expected_direction: 'up' })
+
+function Section({ title, children, defaultOpen = true }) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="border border-terminal-border rounded-lg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-4 py-2.5 bg-terminal-muted/30 text-xs text-terminal-dim uppercase tracking-wider hover:text-terminal-text transition-colors"
+      >
+        {title}
+        <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && <div className="p-4 space-y-3">{children}</div>}
+    </div>
+  )
+}
 
 export default function ThesisModal({ thesis, onClose, onSaved }) {
   const isEdit = Boolean(thesis?.id)
@@ -88,219 +106,202 @@ export default function ThesisModal({ thesis, onClose, onSaved }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-terminal-card border border-terminal-border rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="modal-content max-w-3xl mx-4">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-terminal-border sticky top-0 bg-terminal-card z-10">
           <h2 className="text-base font-bold text-terminal-green">
             {isEdit ? 'Edit Thesis' : 'New Thesis'}
           </h2>
-          <button onClick={onClose} className="text-terminal-dim hover:text-terminal-text">
+          <button onClick={onClose} className="text-terminal-dim hover:text-terminal-text transition-colors">
             <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {error && (
-            <div className="px-3 py-2 rounded bg-red-500/10 border border-red-500/20 text-terminal-red text-sm">
+            <div className="px-3 py-2 rounded bg-terminal-red/10 border border-terminal-red/20 text-terminal-red text-sm">
               {error}
             </div>
           )}
 
-          {/* Basic */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="label">Thesis Name *</label>
-              <input className="input" value={form.name} onChange={e => update('name', e.target.value)} placeholder="e.g. USD Debasement & Hard Asset Premium" required />
+          {/* Core fields */}
+          <Section title="Core Details" defaultOpen={true}>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="label">Thesis Name *</label>
+                <input className="input" value={form.name} onChange={e => update('name', e.target.value)}
+                  placeholder="e.g. USD Debasement & Hard Asset Premium" required />
+              </div>
+              <div>
+                <label className="label">Sector</label>
+                <select className="select" value={form.sector} onChange={e => update('sector', e.target.value)}>
+                  <option value="">Select sector...</option>
+                  {SECTORS.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">Time Horizon</label>
+                <select className="select" value={form.time_horizon} onChange={e => update('time_horizon', e.target.value)}>
+                  <option value="">Select horizon...</option>
+                  {HORIZONS.map(h => <option key={h} value={h}>{h}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">Confidence Level: {form.confidence_level}/10</label>
+                <input type="range" min="1" max="10" value={form.confidence_level}
+                  onChange={e => update('confidence_level', e.target.value)} className="w-full accent-terminal-green mt-1" />
+              </div>
+              <div>
+                <label className="label">Activation Date</label>
+                <input type="date" className="input" value={form.activation_date}
+                  onChange={e => update('activation_date', e.target.value)} />
+              </div>
             </div>
-            <div>
-              <label className="label">Sector</label>
-              <select className="select" value={form.sector} onChange={e => update('sector', e.target.value)}>
-                <option value="">Select sector...</option>
-                {SECTORS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="label">Time Horizon</label>
-              <select className="select" value={form.time_horizon} onChange={e => update('time_horizon', e.target.value)}>
-                <option value="">Select horizon...</option>
-                {HORIZONS.map(h => <option key={h} value={h}>{h}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="label">Confidence Level (1-10)</label>
-              <input type="range" min="1" max="10" value={form.confidence_level}
-                onChange={e => update('confidence_level', e.target.value)} className="w-full accent-terminal-green" />
-              <div className="text-center text-terminal-green font-bold mt-1">{form.confidence_level}</div>
-            </div>
-            <div>
-              <label className="label">Activation Date</label>
-              <input type="date" className="input" value={form.activation_date} onChange={e => update('activation_date', e.target.value)} />
-            </div>
-          </div>
 
-          <div>
-            <label className="label">Description</label>
-            <textarea className="textarea" rows={4} value={form.description}
-              onChange={e => update('description', e.target.value)}
-              placeholder="Describe the macro thesis, data points, and setup..." />
-          </div>
-
-          <div>
-            <label className="label">Bear Case / Steelman of Opposing View</label>
-            <textarea className="textarea" rows={3} value={form.bear_case}
-              onChange={e => update('bear_case', e.target.value)}
-              placeholder="What would make this thesis wrong?" />
-          </div>
-
-          {/* 2nd & 3rd Order Effects */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="label mb-0">2nd & 3rd Order Effects</label>
-              <button type="button" onClick={() => setEffects(p => [...p, emptyEffect()])}
-                className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
-                <Plus size={12} /> Add
-              </button>
+            <div>
+              <label className="label">Description</label>
+              <textarea className="textarea" rows={4} value={form.description}
+                onChange={e => update('description', e.target.value)}
+                placeholder="Describe the macro thesis, data points, and setup..." />
             </div>
-            <div className="space-y-2">
-              {effects.map((eff, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <select
-                    value={eff.order_level}
-                    onChange={e => setEffects(p => p.map((x, j) => j === i ? { ...x, order_level: +e.target.value } : x))}
-                    className="select w-24 shrink-0"
-                  >
-                    <option value={2}>2nd</option>
-                    <option value={3}>3rd</option>
-                  </select>
-                  <input
-                    value={eff.description}
-                    onChange={e => setEffects(p => p.map((x, j) => j === i ? { ...x, description: e.target.value } : x))}
-                    placeholder="Effect description..."
-                    className="input flex-1"
-                  />
-                  <button type="button" onClick={() => setEffects(p => p.filter((_, j) => j !== i))}
-                    className="text-terminal-dim hover:text-terminal-red pt-2">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
+
+            <div>
+              <label className="label">Bear Case / Steelman</label>
+              <textarea className="textarea" rows={3} value={form.bear_case}
+                onChange={e => update('bear_case', e.target.value)}
+                placeholder="What would make this thesis wrong?" />
             </div>
-          </div>
+          </Section>
+
+          {/* Effects */}
+          <Section title="2nd & 3rd Order Effects" defaultOpen={!isEdit}>
+            {effects.map((eff, i) => (
+              <div key={i} className="flex gap-2 items-start">
+                <select
+                  value={eff.order_level}
+                  onChange={e => setEffects(p => p.map((x, j) => j === i ? { ...x, order_level: +e.target.value } : x))}
+                  className="select w-20 shrink-0"
+                >
+                  <option value={2}>2nd</option>
+                  <option value={3}>3rd</option>
+                </select>
+                <input
+                  value={eff.description}
+                  onChange={e => setEffects(p => p.map((x, j) => j === i ? { ...x, description: e.target.value } : x))}
+                  placeholder="Effect description..."
+                  className="input flex-1"
+                />
+                <button type="button" onClick={() => setEffects(p => p.filter((_, j) => j !== i))}
+                  className="text-terminal-dim hover:text-terminal-red pt-2">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={() => setEffects(p => [...p, emptyEffect()])}
+              className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
+              <Plus size={12} /> Add Effect
+            </button>
+          </Section>
 
           {/* Assumptions */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="label mb-0">Key Assumptions</label>
-              <button type="button" onClick={() => setAssumptions(p => [...p, emptyAssumption()])}
-                className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
-                <Plus size={12} /> Add
-              </button>
-            </div>
-            <div className="space-y-2">
-              {assumptions.map((a, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <input
-                    value={a.text}
-                    onChange={e => setAssumptions(p => p.map((x, j) => j === i ? { ...x, text: e.target.value } : x))}
-                    placeholder="Assumption text..."
-                    className="input flex-1"
-                  />
-                  <select
-                    value={a.evidence_rating}
-                    onChange={e => setAssumptions(p => p.map((x, j) => j === i ? { ...x, evidence_rating: e.target.value } : x))}
-                    className="select w-28 shrink-0"
-                  >
-                    <option value="strong">Strong</option>
-                    <option value="mixed">Mixed</option>
-                    <option value="weak">Weak</option>
-                  </select>
-                  <button type="button" onClick={() => setAssumptions(p => p.filter((_, j) => j !== i))}
-                    className="text-terminal-dim hover:text-terminal-red pt-2">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Section title="Key Assumptions" defaultOpen={!isEdit}>
+            {assumptions.map((a, i) => (
+              <div key={i} className="flex gap-2 items-start">
+                <input
+                  value={a.text}
+                  onChange={e => setAssumptions(p => p.map((x, j) => j === i ? { ...x, text: e.target.value } : x))}
+                  placeholder="Assumption text..."
+                  className="input flex-1"
+                />
+                <select
+                  value={a.evidence_rating}
+                  onChange={e => setAssumptions(p => p.map((x, j) => j === i ? { ...x, evidence_rating: e.target.value } : x))}
+                  className="select w-24 shrink-0"
+                >
+                  <option value="strong">Strong</option>
+                  <option value="mixed">Mixed</option>
+                  <option value="weak">Weak</option>
+                </select>
+                <button type="button" onClick={() => setAssumptions(p => p.filter((_, j) => j !== i))}
+                  className="text-terminal-dim hover:text-terminal-red pt-2">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={() => setAssumptions(p => [...p, emptyAssumption()])}
+              className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
+              <Plus size={12} /> Add Assumption
+            </button>
+          </Section>
 
           {/* Invalidation Conditions */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="label mb-0">Invalidation Conditions</label>
-              <button type="button" onClick={() => setInvalidations(p => [...p, emptyInvalidation()])}
-                className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
-                <Plus size={12} /> Add
-              </button>
-            </div>
-            <div className="space-y-2">
-              {invalidations.map((inv, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <input
-                    value={inv.description}
-                    onChange={e => setInvalidations(p => p.map((x, j) => j === i ? { ...x, description: e.target.value } : x))}
-                    placeholder="Signal that kills this thesis..."
-                    className="input flex-1"
-                  />
-                  <button type="button" onClick={() => setInvalidations(p => p.filter((_, j) => j !== i))}
-                    className="text-terminal-dim hover:text-terminal-red pt-2">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Section title="Invalidation Conditions" defaultOpen={!isEdit}>
+            {invalidations.map((inv, i) => (
+              <div key={i} className="flex gap-2 items-start">
+                <input
+                  value={inv.description}
+                  onChange={e => setInvalidations(p => p.map((x, j) => j === i ? { ...x, description: e.target.value } : x))}
+                  placeholder="Signal that kills this thesis..."
+                  className="input flex-1"
+                />
+                <button type="button" onClick={() => setInvalidations(p => p.filter((_, j) => j !== i))}
+                  className="text-terminal-dim hover:text-terminal-red pt-2">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={() => setInvalidations(p => [...p, emptyInvalidation()])}
+              className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
+              <Plus size={12} /> Add Condition
+            </button>
+          </Section>
 
           {/* Proxy Indicators */}
           {!isEdit && (
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="label mb-0">Proxy Indicators</label>
-                <button type="button" onClick={() => setIndicators(p => [...p, emptyIndicator()])}
-                  className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
-                  <Plus size={12} /> Add
-                </button>
-              </div>
-              <div className="space-y-2">
-                {indicators.map((ind, i) => (
-                  <div key={i} className="grid grid-cols-12 gap-2 items-start">
-                    <input
-                      value={ind.ticker_or_series_id}
-                      onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, ticker_or_series_id: e.target.value.toUpperCase() } : x))}
-                      placeholder="TICKER / SERIES_ID"
-                      className="input col-span-3"
-                    />
-                    <input
-                      value={ind.name}
-                      onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
-                      placeholder="Display name"
-                      className="input col-span-4"
-                    />
-                    <select value={ind.source}
-                      onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, source: e.target.value } : x))}
-                      className="select col-span-2">
-                      <option value="yfinance">yfinance</option>
-                      <option value="fred">FRED</option>
-                    </select>
-                    <select value={ind.expected_direction}
-                      onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, expected_direction: e.target.value } : x))}
-                      className="select col-span-2">
-                      <option value="up">↑ Up</option>
-                      <option value="down">↓ Down</option>
-                      <option value="neutral">→ Neutral</option>
-                    </select>
-                    <button type="button" onClick={() => setIndicators(p => p.filter((_, j) => j !== i))}
-                      className="text-terminal-dim hover:text-terminal-red pt-2 col-span-1">
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Section title="Proxy Indicators" defaultOpen={false}>
+              {indicators.map((ind, i) => (
+                <div key={i} className="grid grid-cols-12 gap-2 items-start">
+                  <input
+                    value={ind.ticker_or_series_id}
+                    onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, ticker_or_series_id: e.target.value.toUpperCase() } : x))}
+                    placeholder="TICKER"
+                    className="input col-span-3"
+                  />
+                  <input
+                    value={ind.name}
+                    onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
+                    placeholder="Display name"
+                    className="input col-span-4"
+                  />
+                  <select value={ind.source}
+                    onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, source: e.target.value } : x))}
+                    className="select col-span-2">
+                    <option value="yfinance">yfinance</option>
+                    <option value="fred">FRED</option>
+                  </select>
+                  <select value={ind.expected_direction}
+                    onChange={e => setIndicators(p => p.map((x, j) => j === i ? { ...x, expected_direction: e.target.value } : x))}
+                    className="select col-span-2">
+                    <option value="up">Up</option>
+                    <option value="down">Down</option>
+                    <option value="neutral">Neutral</option>
+                  </select>
+                  <button type="button" onClick={() => setIndicators(p => p.filter((_, j) => j !== i))}
+                    className="text-terminal-dim hover:text-terminal-red pt-2 col-span-1">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={() => setIndicators(p => [...p, emptyIndicator()])}
+                className="text-xs text-terminal-green hover:text-terminal-text flex items-center gap-1">
+                <Plus size={12} /> Add Indicator
+              </button>
+            </Section>
           )}
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 pt-2 border-t border-terminal-border">
+          <div className="flex justify-end gap-3 pt-4 border-t border-terminal-border">
             <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
             <button type="submit" disabled={saving} className="btn-primary">
               {saving ? 'Saving...' : isEdit ? 'Update Thesis' : 'Create Thesis'}

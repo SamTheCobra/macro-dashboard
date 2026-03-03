@@ -13,7 +13,7 @@ import ThesisModal from '../components/modals/ThesisModal'
 import BetModal from '../components/modals/BetModal'
 import JournalModal from '../components/modals/JournalModal'
 import { fmtDate, fmtDateTime, evidenceColor, tagColor, tagLabel, convictionColor } from '../utils/formatters'
-import { ArrowLeft, Edit3, Plus, AlertTriangle, CheckCircle, Clock, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit3, Plus, AlertTriangle, CheckCircle, Clock, Trash2, ChevronRight } from 'lucide-react'
 
 const TABS = ['Overview', 'Proxy Charts', 'Conviction Log', 'Bets', 'Effects Graph', 'News', 'Catalysts']
 
@@ -40,52 +40,63 @@ export default function ThesisDetail() {
   if (loading || !thesis) {
     return (
       <div className="p-6 space-y-4">
-        <div className="h-8 w-64 bg-terminal-muted rounded animate-pulse" />
-        <div className="h-64 bg-terminal-card rounded animate-pulse" />
+        <div className="skeleton h-8 w-64" />
+        <div className="skeleton h-4 w-48 mt-2" />
+        <div className="skeleton h-64 mt-6" />
       </div>
     )
   }
 
   const sortedJournal = [...(thesis.conviction_entries || [])].sort((a, b) => new Date(b.date) - new Date(a.date))
+  const triggeredCount = thesis.invalidation_conditions?.filter(c => c.is_triggered).length || 0
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="px-6 pt-5 pb-4 border-b border-terminal-border">
+      {/* ── Header ──────────────────────────────────────────── */}
+      <div className="px-6 pt-5 pb-4 border-b border-terminal-border bg-terminal-card/40">
+        {/* Breadcrumb */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-terminal-dim hover:text-terminal-text text-sm mb-4 transition-colors"
+          className="flex items-center gap-1.5 text-terminal-dim hover:text-terminal-green text-xs mb-3 transition-colors"
         >
-          <ArrowLeft size={14} /> Back to Dashboard
+          <ArrowLeft size={12} />
+          Dashboard
+          <ChevronRight size={10} />
+          <span className="text-terminal-text">{thesis.name}</span>
         </button>
+
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold text-terminal-text mb-1">{thesis.name}</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl font-bold text-terminal-text mb-2 truncate">{thesis.name}</h1>
             <div className="flex items-center gap-3 flex-wrap">
-              {thesis.sector && (
-                <span className="badge bg-terminal-muted text-terminal-dim">{thesis.sector}</span>
-              )}
+              {thesis.sector && <span className="badge-dim">{thesis.sector}</span>}
               {thesis.time_horizon && (
                 <span className="flex items-center gap-1 text-xs text-terminal-dim">
                   <Clock size={11} /> {thesis.time_horizon}
                 </span>
               )}
               <span className="text-xs text-terminal-dim">
-                Since {fmtDate(thesis.activation_date)}
+                Active since {fmtDate(thesis.activation_date)}
               </span>
+              {triggeredCount > 0 && (
+                <span className="badge-red">
+                  <AlertTriangle size={10} className="mr-1" />
+                  {triggeredCount} triggered
+                </span>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <HealthScoreBadge score={thesis.health_score} size="lg" />
             <button onClick={() => setShowEditModal(true)} className="btn-secondary text-xs">
-              <Edit3 size={13} className="inline mr-1" /> Edit
+              <Edit3 size={12} className="inline mr-1" /> Edit
             </button>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-terminal-border px-6">
+      {/* ── Tabs ────────────────────────────────────────────── */}
+      <div className="border-b border-terminal-border px-6 bg-terminal-card/20">
         <div className="flex gap-0 overflow-x-auto">
           {TABS.map(t => (
             <button
@@ -97,22 +108,22 @@ export default function ThesisDetail() {
             >
               {t}
               {t === 'Bets' && thesis.bets?.length > 0 && (
-                <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-terminal-muted text-terminal-dim text-xs">
+                <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-terminal-muted text-terminal-dim text-[10px]">
                   {thesis.bets.length}
                 </span>
               )}
-              {t === 'Overview' && thesis.invalidation_conditions?.some(c => c.is_triggered) && (
-                <span className="ml-1.5 text-terminal-red">!</span>
+              {t === 'Overview' && triggeredCount > 0 && (
+                <span className="ml-1 text-terminal-red text-[10px]">!</span>
               )}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Tab Content */}
+      {/* ── Tab Content ─────────────────────────────────────── */}
       <div className="flex-1 overflow-y-auto p-6">
 
-        {/* ── OVERVIEW ─────────────────────────────────────────────── */}
+        {/* ── OVERVIEW ──────────────────────────────────── */}
         {tab === 'Overview' && (
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="xl:col-span-2 space-y-5">
@@ -128,7 +139,7 @@ export default function ThesisDetail() {
                 {thesis.assumptions?.length ? (
                   <div className="space-y-2">
                     {thesis.assumptions.map(a => (
-                      <div key={a.id} className="flex items-start gap-3">
+                      <div key={a.id} className="flex items-start gap-3 p-2 rounded hover:bg-terminal-muted/30 transition-colors">
                         <div
                           className="w-2 h-2 rounded-full mt-1.5 shrink-0"
                           style={{ backgroundColor: evidenceColor(a.evidence_rating) }}
@@ -164,8 +175,10 @@ export default function ThesisDetail() {
                     {thesis.invalidation_conditions.map(inv => (
                       <div
                         key={inv.id}
-                        className={`flex items-start gap-3 p-2 rounded ${
-                          inv.is_triggered ? 'bg-red-500/10 border border-red-500/20' : ''
+                        className={`flex items-start gap-3 p-2.5 rounded transition-colors ${
+                          inv.is_triggered
+                            ? 'bg-terminal-red/8 border border-terminal-red/20'
+                            : 'hover:bg-terminal-muted/30'
                         }`}
                       >
                         {inv.is_triggered ? (
@@ -189,7 +202,7 @@ export default function ThesisDetail() {
                               await updateInvalidation(inv.id, { is_triggered: true })
                               load()
                             }}
-                            className="text-xs text-terminal-dim hover:text-terminal-red shrink-0"
+                            className="text-xs text-terminal-dim hover:text-terminal-red shrink-0 transition-colors"
                             title="Mark as triggered"
                           >
                             Flag
@@ -203,7 +216,7 @@ export default function ThesisDetail() {
 
               {/* Bear Case */}
               {thesis.bear_case && (
-                <div className="card border-red-500/20">
+                <div className="card border-terminal-red/20">
                   <div className="section-title text-terminal-red">Bear Case / Steelman</div>
                   <p className="text-sm text-terminal-text leading-relaxed">{thesis.bear_case}</p>
                 </div>
@@ -222,7 +235,7 @@ export default function ThesisDetail() {
                     ['Activation', fmtDate(thesis.activation_date)],
                     ['Status', thesis.status.toUpperCase()],
                     ['Active Bets', thesis.bets?.filter(b => b.status === 'active').length || 0],
-                    ['Triggered Conditions', thesis.invalidation_conditions?.filter(c => c.is_triggered).length || 0],
+                    ['Triggered', triggeredCount],
                   ].map(([label, val]) => (
                     <div key={label} className="flex justify-between text-sm">
                       <span className="text-terminal-dim">{label}</span>
@@ -232,7 +245,7 @@ export default function ThesisDetail() {
                 </div>
               </div>
 
-              {/* 2nd/3rd order effects mini */}
+              {/* 2nd/3rd order effects */}
               <div className="card">
                 <div className="section-title">Order Effects</div>
                 <div className="space-y-2">
@@ -251,7 +264,7 @@ export default function ThesisDetail() {
                     </div>
                   ))}
                   {(thesis.second_order_effects?.length || 0) > 6 && (
-                    <button onClick={() => setTab('Effects Graph')} className="text-xs text-terminal-green hover:underline">
+                    <button onClick={() => setTab('Effects Graph')} className="text-xs text-terminal-green hover:underline mt-1">
                       View all in graph →
                     </button>
                   )}
@@ -261,7 +274,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── PROXY CHARTS ─────────────────────────────────────────── */}
+        {/* ── PROXY CHARTS ──────────────────────────────── */}
         {tab === 'Proxy Charts' && (
           <div>
             <div className="text-xs text-terminal-dim mb-4">
@@ -279,7 +292,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── CONVICTION LOG ────────────────────────────────────────── */}
+        {/* ── CONVICTION LOG ────────────────────────────── */}
         {tab === 'Conviction Log' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
@@ -299,14 +312,13 @@ export default function ThesisDetail() {
               />
             </div>
 
-            {/* Journal entries */}
             <div className="space-y-2">
               {sortedJournal.map(entry => (
-                <div key={entry.id} className="card-sm hover:border-terminal-border/60 transition-colors">
+                <div key={entry.id} className="card-sm hover:border-terminal-green/20 transition-colors">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-3 shrink-0">
                       <span
-                        className="text-2xl font-bold"
+                        className="text-2xl font-bold tabular-nums"
                         style={{ color: convictionColor(entry.conviction_score) }}
                       >
                         {entry.conviction_score}
@@ -330,7 +342,7 @@ export default function ThesisDetail() {
                         await deleteJournalEntry(thesis.id, entry.id)
                         load()
                       }}
-                      className="text-terminal-dim hover:text-terminal-red shrink-0"
+                      className="text-terminal-dim hover:text-terminal-red shrink-0 transition-colors"
                     >
                       <Trash2 size={13} />
                     </button>
@@ -346,7 +358,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── BETS ─────────────────────────────────────────────────── */}
+        {/* ── BETS ──────────────────────────────────────── */}
         {tab === 'Bets' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
@@ -360,7 +372,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── EFFECTS GRAPH ─────────────────────────────────────────── */}
+        {/* ── EFFECTS GRAPH ─────────────────────────────── */}
         {tab === 'Effects Graph' && (
           <div>
             <div className="text-xs text-terminal-dim mb-3">
@@ -370,7 +382,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── NEWS ─────────────────────────────────────────────────── */}
+        {/* ── NEWS ──────────────────────────────────────── */}
         {tab === 'News' && (
           <div>
             <div className="section-title">Latest Headlines</div>
@@ -378,7 +390,7 @@ export default function ThesisDetail() {
           </div>
         )}
 
-        {/* ── CATALYSTS ────────────────────────────────────────────── */}
+        {/* ── CATALYSTS ─────────────────────────────────── */}
         {tab === 'Catalysts' && (
           <CatalystTimeline
             thesisId={thesis.id}
